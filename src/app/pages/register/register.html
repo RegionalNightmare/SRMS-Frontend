@@ -1,0 +1,67 @@
+<section class="auth-card">
+  <h2>Create an account</h2>
+  <p class="subtitle">
+    Register to place orders, make reservations, and request events.
+  </p>
+
+  <p *ngIf="error" class="error">
+    {{ error }}
+  </p>
+
+  <form (ngSubmit)="submit()" autocomplete="off">
+    <label>
+      Name
+      <input
+        type="text"
+        [(ngModel)]="name"
+        name="name"
+        required
+        placeholder="Your name"
+      />
+    </label>
+
+    <label>
+      Email
+      <input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        required
+        placeholder="you@example.com"
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+        minlength="6"
+        placeholder="At least 6 characters"
+      />
+    </label>
+
+    <label>
+      Confirm Password
+      <input
+        type="password"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        required
+        minlength="6"
+        placeholder="Re-enter your password"
+      />
+    </label>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Creating account...' : 'Register' }}
+    </button>
+  </form>
+
+  <p class="helper">
+    Already have an account?
+    <a routerLink="/login">Log in here.</a>
+  </p>
+</section>

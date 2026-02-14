@@ -1,0 +1,89 @@
+<section class="page admin-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Orders</h1>
+      <p class="sub">
+        Review all customer orders and update their status as they move through
+        the kitchen and pickup/delivery flow.
+      </p>
+    </div>
+
+    <button class="refresh" type="button" (click)="loadOrders()">
+      Refresh
+    </button>
+  </header>
+
+  <p *ngIf="error()" class="msg error">{{ error() }}</p>
+  <p *ngIf="success()" class="msg success">{{ success() }}</p>
+
+  <p *ngIf="loading()" class="loading">Loading orders…</p>
+  <p
+    *ngIf="!loading() && orders().length === 0"
+    class="empty"
+  >
+    No orders found.
+  </p>
+
+  <table
+    *ngIf="!loading() && orders().length > 0"
+    class="data-table"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Customer</th>
+        <th>Type</th>
+        <th>Total</th>
+        <th>Placed</th>
+        <th>Status</th>
+        <th class="right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orders()">
+        <td>#{{ o.id }}</td>
+        <td>
+          <div>{{ o.user_name || 'Guest' }}</div>
+          <div class="meta" *ngIf="o.user_email">{{ o.user_email }}</div>
+        </td>
+        <td>{{ o.type | titlecase }}</td>
+        <td>{{ o.total_price | currency : 'USD' }}</td>
+        <td>{{ o.created_at | date : 'short' }}</td>
+        <td>
+          <span class="status-pill" [class.pending]="o.status === 'pending'"
+            [class.completed]="o.status === 'completed'"
+            [class.cancelled]="o.status === 'cancelled'">
+            {{ o.status | titlecase }}
+          </span>
+        </td>
+        <td class="right">
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="o.status === 'pending'"
+            (click)="updateStatus(o, 'pending')"
+          >
+            Pending
+          </button>
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="o.status === 'completed'"
+            (click)="updateStatus(o, 'completed')"
+          >
+            Completed
+          </button>
+          <button
+            type="button"
+            class="row-btn danger"
+            [class.active]="o.status === 'cancelled'"
+            (click)="updateStatus(o, 'cancelled')"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

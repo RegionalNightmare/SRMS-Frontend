@@ -1,0 +1,87 @@
+<section class="page admin-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Events</h1>
+      <p class="sub">
+        Manage special event requests like birthdays, celebrations, and
+        corporate bookings.
+      </p>
+    </div>
+
+    <button class="refresh" type="button" (click)="loadEvents()">
+      Refresh
+    </button>
+  </header>
+
+  <p *ngIf="error()" class="msg error">{{ error() }}</p>
+  <p *ngIf="success()" class="msg success">{{ success() }}</p>
+
+  <p *ngIf="loading()" class="loading">Loading events…</p>
+  <p *ngIf="!loading() && events().length === 0" class="empty">
+    No events found.
+  </p>
+
+  <table
+    *ngIf="!loading() && events().length > 0"
+    class="data-table"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Guest</th>
+        <th>Event</th>
+        <th>Date &amp; time</th>
+        <th>Guests</th>
+        <th>Status</th>
+        <th class="right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of events()">
+        <td>#{{ e.id }}</td>
+        <td>
+          <div>{{ e.user_name || 'Guest' }}</div>
+          <div class="meta" *ngIf="e.user_email">{{ e.user_email }}</div>
+        </td>
+        <td>{{ e.event_type }}</td>
+        <td>{{ e.event_datetime | date : 'short' }}</td>
+        <td>{{ e.number_of_guests }}</td>
+        <td>
+          <span class="status-pill"
+                [class.pending]="e.status === 'pending'"
+                [class.approved]="e.status === 'approved'"
+                [class.cancelled]="e.status === 'cancelled'">
+            {{ e.status | titlecase }}
+          </span>
+        </td>
+        <td class="right">
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="e.status === 'pending'"
+            (click)="updateStatus(e, 'pending')"
+          >
+            Pending
+          </button>
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="e.status === 'approved'"
+            (click)="updateStatus(e, 'approved')"
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            class="row-btn danger"
+            [class.active]="e.status === 'cancelled'"
+            (click)="updateStatus(e, 'cancelled')"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

@@ -1,0 +1,39 @@
+<nav class="nav">
+  <div class="nav-left">
+    <a routerLink="/" class="brand">SRMS</a>
+  </div>
+
+  <div class="nav-center">
+    <a routerLink="/menu" routerLinkActive="active">Menu</a>
+    <a *ngIf="auth.isLoggedIn()" routerLink="/orders" routerLinkActive="active">
+      Orders
+    </a>
+    <a
+      *ngIf="auth.isLoggedIn()"
+      routerLink="/reservations"
+      routerLinkActive="active"
+    >
+      Reservations
+    </a>
+    <a *ngIf="auth.isLoggedIn()" routerLink="/events" routerLinkActive="active">
+      Events
+    </a>
+    <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active">
+      Admin
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <ng-container *ngIf="auth.isLoggedIn(); else guestLinks">
+      <span class="user-label">
+        {{ auth.currentUser?.name }} ({{ auth.currentUser?.role }})
+      </span>
+      <button (click)="logout()">Logout</button>
+    </ng-container>
+
+    <ng-template #guestLinks>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Register</a>
+    </ng-template>
+  </div>
+</nav>

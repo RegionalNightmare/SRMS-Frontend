@@ -1,0 +1,97 @@
+<section class="page admin-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Reservations</h1>
+      <p class="sub">
+        See upcoming reservations, confirm or cancel them, and keep track of
+        guest counts.
+      </p>
+    </div>
+
+    <button class="refresh" type="button" (click)="loadReservations()">
+      Refresh
+    </button>
+  </header>
+
+  <p *ngIf="error()" class="msg error">{{ error() }}</p>
+  <p *ngIf="success()" class="msg success">{{ success() }}</p>
+
+  <p *ngIf="loading()" class="loading">Loading reservations…</p>
+  <p
+    *ngIf="!loading() && reservations().length === 0"
+    class="empty"
+  >
+    No reservations found.
+  </p>
+
+  <table
+    *ngIf="!loading() && reservations().length > 0"
+    class="data-table"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Guest</th>
+        <th>Date &amp; time</th>
+        <th>Guests</th>
+        <th>Notes</th>
+        <th>Status</th>
+        <th class="right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of reservations()">
+        <td>#{{ r.id }}</td>
+        <td>
+          <div>{{ r.user_name || 'Guest' }}</div>
+          <div class="meta" *ngIf="r.user_email">{{ r.user_email }}</div>
+        </td>
+        <td>{{ r.reservation_datetime | date : 'short' }}</td>
+        <td>{{ r.number_of_guests }}</td>
+        <td>
+          <span class="meta" *ngIf="r.notes; else noNotes">
+            {{ r.notes }}
+          </span>
+          <ng-template #noNotes>
+            <span class="meta dim">—</span>
+          </ng-template>
+        </td>
+        <td>
+          <span class="status-pill"
+                [class.pending]="r.status === 'pending'"
+                [class.approved]="r.status === 'approved'"
+                [class.cancelled]="r.status === 'cancelled'">
+            {{ r.status | titlecase }}
+          </span>
+        </td>
+        <td class="right">
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="r.status === 'pending'"
+            (click)="updateStatus(r, 'pending')"
+          >
+            Pending
+          </button>
+          <button
+            type="button"
+            class="row-btn"
+            [class.active]="r.status === 'approved'"
+            (click)="updateStatus(r, 'approved')"
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            class="row-btn danger"
+            [class.active]="r.status === 'cancelled'"
+            (click)="updateStatus(r, 'cancelled')"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

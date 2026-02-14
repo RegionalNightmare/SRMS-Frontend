@@ -1,0 +1,99 @@
+<section class="page menu-page">
+  <!-- Hero header -->
+  <header class="menu-header">
+    <p class="eyebrow">Our menu</p>
+    <h1>Fresh, comforting, and made to order.</h1>
+    <p class="menu-sub">
+      Browse the dishes, then place an order or add notes for your reservation
+      or event.
+    </p>
+  </header>
+
+  <!-- Status messages -->
+  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="loading" class="loading">Loading menu…</p>
+
+  <!-- Dish grid -->
+  <section
+    class="menu-grid"
+    *ngIf="!loading && menuItems && menuItems.length > 0"
+  >
+    <article class="dish-card" *ngFor="let item of menuItems">
+      <div class="dish-top">
+        <div class="dish-head">
+          <p class="dish-name">{{ item.name }}</p>
+          <p class="dish-price">
+            {{ item.price | currency : 'USD' }}
+          </p>
+        </div>
+
+        <p class="dish-category">
+          {{ item.category || 'other' | uppercase }}
+        </p>
+
+        <p class="dish-desc" *ngIf="item.description">
+          {{ item.description }}
+        </p>
+      </div>
+
+      <div class="dish-meta">
+        <span class="pill warning" *ngIf="!item.available">
+  Unavailable
+</span>
+
+        <span class="pill accent" *ngIf="item.dietary_tags">
+          {{ item.dietary_tags }}
+        </span>
+      </div>
+    </article>
+  </section>
+
+  <p
+    *ngIf="!loading && menuItems && menuItems.length === 0"
+    class="empty"
+  >
+    No menu items found yet.
+  </p>
+
+  <!-- Specials / deals banner -->
+  <section class="menu-specials">
+    <div class="special-hero">
+      <p class="special-eyebrow">Specials & Combos</p>
+      <h2>Make tonight extra special.</h2>
+      <p class="special-sub">
+        Try one of our featured deals — perfect for a quick bite, a cozy dinner,
+        or feeding the whole crew. Ask your server or add a note when placing an
+        order.
+      </p>
+    </div>
+
+    <div class="special-grid">
+      <article class="special-card">
+        <p class="special-label">Tonight</p>
+        <h3>Two-for-Tuesday</h3>
+        <p class="special-text">Any 2 mains for $24.99</p>
+        <p class="special-foot">
+          Ideal for date night or sharing with a friend.
+        </p>
+      </article>
+
+      <article class="special-card">
+        <p class="special-label">Weekday special</p>
+        <h3>Lunch Combo</h3>
+        <p class="special-text">Slice + side + drink $11.99</p>
+        <p class="special-foot">
+          Weekdays 11am–3pm. Quick, hot, and affordable.
+        </p>
+      </article>
+
+      <article class="special-card">
+        <p class="special-label">Best value</p>
+        <h3>Family Feast</h3>
+        <p class="special-text">Feeds 4–5 for $49.99</p>
+        <p class="special-foot">
+          Mix of mains, sides, and sharables for the whole table.
+        </p>
+      </article>
+    </div>
+  </section>
+</section>

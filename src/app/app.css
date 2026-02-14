@@ -1,0 +1,139 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAVBAR */
+
+.app-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(2, 6, 23, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #111827;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.brand {
+  text-decoration: none;
+}
+
+.brand-mark {
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #facc15;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  flex: 1;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: #9ca3af;
+  padding: 0.2rem 0.4rem;
+  border-radius: 999px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: #e5e7eb;
+}
+
+.nav-links a.active {
+  background: rgba(251, 191, 36, 0.12);
+  color: #facc15;
+}
+
+/* Right side auth */
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+
+.nav-auth a {
+  text-decoration: none;
+  color: #9ca3af;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.nav-auth a:hover,
+.nav-auth a.active {
+  background: rgba(55, 65, 81, 0.8);
+  color: #f9fafb;
+}
+
+.nav-user {
+  max-width: 150px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #e5e7eb;
+}
+
+.nav-btn {
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* MAIN LAYOUT */
+
+.app-main {
+  flex: 1;
+  padding: 1.5rem 0 3rem;
+}
+
+.app-main-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Small screens */
+
+@media (max-width: 768px) {
+  .nav-inner {
+    padding-inline: 1rem;
+  }
+
+  .nav-links {
+    display: none; /* simplest: hide center links on tiny screens */
+  }
+
+  .nav-auth {
+    margin-left: auto;
+  }
+}

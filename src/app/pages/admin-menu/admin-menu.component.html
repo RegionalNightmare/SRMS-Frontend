@@ -1,0 +1,253 @@
+<section class="page admin-menu-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Manage menu</h1>
+      <p class="sub">
+        Add new dishes, update details, toggle availability, or remove items
+        from the customer menu.
+      </p>
+    </div>
+
+    <button type="button" class="refresh" (click)="loadMenu()">
+      Refresh
+    </button>
+  </header>
+
+  <p *ngIf="error()" class="msg error">{{ error() }}</p>
+  <p *ngIf="success()" class="msg success">{{ success() }}</p>
+
+  <!-- CREATE NEW DISH -->
+  <section class="form-card">
+    <h2 class="section-title">Add a new dish</h2>
+
+    <form (ngSubmit)="createItem()" autocomplete="off">
+      <div class="field-row">
+        <label>
+          Name
+          <input
+            type="text"
+            name="name"
+            [ngModel]="createForm().name"
+            (ngModelChange)="updateCreate('name', $event)"
+            required
+          />
+        </label>
+
+        <label>
+          Category
+          <select
+            name="category"
+            [ngModel]="createForm().category"
+            (ngModelChange)="updateCreate('category', $event)"
+          >
+            <option value="starter">Starter</option>
+            <option value="main">Main</option>
+            <option value="dessert">Dessert</option>
+            <option value="beverage">Beverage</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Price
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            name="price"
+            [ngModel]="createForm().price"
+            (ngModelChange)="updateCreate('price', +$event)"
+            required
+          />
+        </label>
+      </div>
+
+      <label>
+        Description
+        <textarea
+          rows="2"
+          name="description"
+          [ngModel]="createForm().description"
+          (ngModelChange)="updateCreate('description', $event)"
+          placeholder="Short description of the dish."
+        ></textarea>
+      </label>
+
+      <label>
+        Dietary tags
+        <input
+          type="text"
+          name="dietary_tags"
+          [ngModel]="createForm().dietary_tags"
+          (ngModelChange)="updateCreate('dietary_tags', $event)"
+          placeholder="e.g. vegetarian, gluten-free"
+        />
+      </label>
+
+      <label class="inline-checkbox">
+        <input
+          type="checkbox"
+          name="available"
+          [checked]="createForm().available"
+          (change)="updateCreate('available', $any($event.target).checked)"
+        />
+        Available on menu
+      </label>
+
+      <button type="submit" [disabled]="creating()">
+        {{ creating() ? 'Saving…' : 'Add dish' }}
+      </button>
+    </form>
+  </section>
+
+  <!-- EXISTING MENU ITEMS -->
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Current menu</h2>
+      <span class="count">{{ items().length }} items</span>
+    </div>
+
+    <p *ngIf="loading()" class="loading">Loading menu…</p>
+    <p *ngIf="!loading() && items().length === 0" class="empty">
+      No menu items found.
+    </p>
+
+    <table *ngIf="!loading() && items().length > 0" class="data-table">
+      <thead>
+        <tr>
+          <th>Name & description</th>
+          <th>Category</th>
+          <th class="right">Price</th>
+          <th>Available</th>
+          <th class="right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items()">
+          <!-- NAME / DESC (view or edit) -->
+          <td>
+            <ng-container *ngIf="editingId() !== item.id; else editName">
+              <div class="name-row">
+                <strong>{{ item.name }}</strong>
+                <span *ngIf="item.dietary_tags" class="diet">
+                  {{ item.dietary_tags }}
+                </span>
+              </div>
+              <div *ngIf="item.description" class="desc">
+                {{ item.description }}
+              </div>
+            </ng-container>
+
+            <ng-template #editName>
+              <input
+                type="text"
+                [ngModel]="editForm().name"
+                (ngModelChange)="updateEdit('name', $event)"
+              />
+              <textarea
+                rows="2"
+                [ngModel]="editForm().description"
+                (ngModelChange)="updateEdit('description', $event)"
+                placeholder="Description"
+              ></textarea>
+              <input
+                type="text"
+                [ngModel]="editForm().dietary_tags"
+                (ngModelChange)="updateEdit('dietary_tags', $event)"
+                placeholder="Dietary tags"
+              />
+            </ng-template>
+          </td>
+
+          <!-- CATEGORY -->
+          <td>
+            <ng-container *ngIf="editingId() !== item.id; else editCategory">
+              {{ item.category | titlecase }}
+            </ng-container>
+
+            <ng-template #editCategory>
+              <select
+                [ngModel]="editForm().category"
+                (ngModelChange)="updateEdit('category', $event)"
+              >
+                <option value="starter">Starter</option>
+                <option value="main">Main</option>
+                <option value="dessert">Dessert</option>
+                <option value="beverage">Beverage</option>
+                <option value="other">Other</option>
+              </select>
+            </ng-template>
+          </td>
+
+          <!-- PRICE -->
+          <td class="right">
+            <ng-container *ngIf="editingId() !== item.id; else editPrice">
+              {{ item.price | currency : 'USD' }}
+            </ng-container>
+
+            <ng-template #editPrice>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                [ngModel]="editForm().price"
+                (ngModelChange)="updateEdit('price', +$event)"
+              />
+            </ng-template>
+          </td>
+
+          <!-- AVAILABLE QUICK TOGGLE -->
+          <td>
+            <button
+              type="button"
+              class="pill-btn"
+              [class.on]="item.available"
+              (click)="toggleAvailability(item)"
+            >
+              {{ item.available ? 'On' : 'Off' }}
+            </button>
+          </td>
+
+          <!-- ACTIONS -->
+          <td class="right actions">
+            <ng-container *ngIf="editingId() !== item.id; else editActions">
+              <button
+                type="button"
+                class="row-btn"
+                (click)="startEdit(item)"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                class="row-btn danger"
+                (click)="deleteItem(item)"
+              >
+                Delete
+              </button>
+            </ng-container>
+
+            <ng-template #editActions>
+              <button
+                type="button"
+                class="row-btn"
+                [disabled]="savingEdit()"
+                (click)="saveEdit()"
+              >
+                {{ savingEdit() ? 'Saving…' : 'Save' }}
+              </button>
+              <button
+                type="button"
+                class="row-btn subtle"
+                (click)="cancelEdit()"
+              >
+                Cancel
+              </button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

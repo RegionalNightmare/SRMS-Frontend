@@ -1,0 +1,51 @@
+<!-- Floating toggle button -->
+<button
+  class="chat-toggle"
+  type="button"
+  (click)="toggle()"
+  [class.open]="isOpen()"
+>
+  <span *ngIf="!isOpen()">Chat</span>
+  <span *ngIf="isOpen()">Close</span>
+</button>
+
+<!-- Panel -->
+<div class="chat-panel" *ngIf="isOpen()">
+  <header class="chat-header">
+    <div>
+      <p class="chat-eyebrow">SRMS Assistant</p>
+      <h2>Need a hand?</h2>
+    </div>
+  </header>
+
+  <div class="chat-body">
+    <div class="quick-row">
+      <button type="button" (click)="sendQuick('overview')">What can I do?</button>
+      <button type="button" (click)="sendQuick('order')">Orders</button>
+      <button type="button" (click)="sendQuick('reservation')">Reservations</button>
+      <button type="button" (click)="sendQuick('event')">Events</button>
+      <button type="button" (click)="sendQuick('admin')">Admin</button>
+    </div>
+
+    <div class="messages">
+      <div
+        *ngFor="let m of messages()"
+        class="msg"
+        [class.user]="m.from === 'user'"
+        [class.bot]="m.from === 'bot'"
+      >
+        <p>{{ m.text }}</p>
+      </div>
+    </div>
+  </div>
+
+  <form class="chat-input" (ngSubmit)="sendManual()">
+    <input
+      type="text"
+      placeholder="Ask about orders, reservations, events, or admin..."
+      [value]="input()"
+      (input)="input.set($event.target.value)"
+    />
+    <button type="submit">Send</button>
+  </form>
+</div>

@@ -1,0 +1,130 @@
+<section class="page events-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Events</p>
+      <h1>Plan a special event</h1>
+      <p class="sub">
+        Tell us what you’re celebrating, when you’d like to host it, and how
+        many guests are coming. Optionally pick dishes you’d like served.
+      </p>
+    </div>
+  </header>
+
+  <p *ngIf="error()" class="error">{{ error() }}</p>
+  <p *ngIf="success()" class="success">{{ success() }}</p>
+
+  <!-- Event request form -->
+  <section class="form-card">
+    <form (ngSubmit)="submitEventRequest()" autocomplete="off">
+      <div class="field-row">
+        <label>
+          Event type
+          <select
+            [ngModel]="eventType()"
+            (ngModelChange)="eventType.set($event)"
+            name="eventType"
+          >
+            <option value="birthday">Birthday</option>
+            <option value="wedding">Wedding</option>
+            <option value="corporate">Corporate</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Date & time
+          <input
+            type="datetime-local"
+            [ngModel]="eventDatetime()"
+            (ngModelChange)="eventDatetime.set($event)"
+            name="eventDatetime"
+            required
+          />
+        </label>
+
+        <label>
+          Guests
+          <input
+            type="number"
+            min="5"
+            max="300"
+            [ngModel]="numberOfGuests()"
+            (ngModelChange)="numberOfGuests.set($event)"
+            name="numberOfGuests"
+            required
+          />
+        </label>
+      </div>
+
+      <div class="menu-select-block">
+        <p class="menu-select-title">Optional: choose sample dishes</p>
+        <p class="menu-select-sub">
+          This gives our team an idea of the style of food you’re looking for.
+          Final menu can be adjusted later.
+        </p>
+
+        <div class="menu-select-grid">
+          <label
+            *ngFor="let item of menu()"
+            class="menu-pill"
+          >
+            <input
+              type="checkbox"
+              [checked]="selectedMenuIds().has(item.id)"
+              (change)="toggleMenuSelection(item.id, $any($event.target).checked)"
+            />
+            <span>
+              <strong>{{ item.name }}</strong>
+              <span class="pill-category">• {{ item.category }}</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Sending request...' : 'Request event' }}
+      </button>
+    </form>
+  </section>
+
+  <!-- Event history -->
+  <section class="history-section">
+    <h2 class="section-title">Your event requests</h2>
+
+    <p *ngIf="myEvents().length === 0" class="empty-history">
+      You haven’t requested any events yet.
+    </p>
+
+    <div *ngIf="myEvents().length > 0" class="history-list">
+      <article *ngFor="let e of myEvents()" class="history-card">
+        <header class="history-header">
+          <div>
+            <p class="history-type">
+              {{ e.event_type | titlecase }}
+            </p>
+            <p class="history-meta">
+              {{ e.event_datetime | date: 'fullDate' }} •
+              {{ e.event_datetime | date: 'shortTime' }} •
+              {{ e.number_of_guests }} guest{{
+                e.number_of_guests > 1 ? 's' : ''
+              }}
+            </p>
+          </div>
+
+          <span
+            class="status-pill"
+            [class.pending]="e.status === 'pending'"
+            [class.approved]="e.status === 'approved'"
+            [class.cancelled]="e.status === 'cancelled'"
+          >
+            {{ e.status | titlecase }}
+          </span>
+        </header>
+
+        <p class="history-created">
+          Requested {{ e.created_at | date: 'medium' }}
+        </p>
+      </article>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,241 @@
+<section class="page orders-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Orders</p>
+      <h1>Build your order</h1>
+      <p class="sub">
+        Choose your dishes and submit an order for pickup or delivery.
+      </p>
+    </div>
+    <div class="order-type-toggle">
+      <span>Order type:</span>
+      <label>
+        <input
+          type="radio"
+          name="orderType"
+          value="pickup"
+          [checked]="orderType() === 'pickup'"
+          (change)="orderType.set('pickup')"
+        />
+        Pickup
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="orderType"
+          value="delivery"
+          [checked]="orderType() === 'delivery'"
+          (change)="orderType.set('delivery')"
+        />
+        Delivery
+      </label>
+    </div>
+  </header>
+
+  <p *ngIf="error()" class="error">
+    {{ error() }}
+  </p>
+  <p *ngIf="success()" class="success">
+    {{ success() }}
+  </p>
+
+  <!-- Menu selection / cart builder -->
+  <div class="orders-layout">
+    <div class="menu-column">
+      <h2 class="section-title">Menu</h2>
+      <div class="menu-grid">
+        <article *ngFor="let item of menu()" class="menu-card">
+          <ng-container *ngIf="imageUrl(item) as src">
+            <div class="menu-image">
+              <img [src]="src" [alt]="item.name" />
+            </div>
+          </ng-container>
+
+          <div class="menu-body">
+            <div class="menu-top">
+              <div>
+                <h3>{{ item.name }}</h3>
+                <p class="category">{{ item.category }}</p>
+              </div>
+              <span class="price">{{ item.price | currency : 'USD' }}</span>
+            </div>
+
+            <p class="description" *ngIf="item.description">
+              {{ item.description }}
+            </p>
+
+            <div class="qty-row">
+              <label>
+                Quantity
+                <input
+                  type="number"
+                  min="0"
+                  [value]="quantities()[item.id] || 0"
+                  (input)="updateQuantity(item.id, $any($event.target).value)"
+                />
+              </label>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Cart summary -->
+    <aside class="cart-column">
+      <h2 class="section-title">Your order</h2>
+
+      <div *ngIf="cartItems().length === 0" class="empty-cart">
+        <p>No items selected yet.</p>
+        <p class="hint">Set quantity above 0 on any dish to add it here.</p>
+      </div>
+
+      <div *ngIf="cartItems().length > 0" class="cart-panel">
+        <ul class="cart-list">
+          <!-- Order details -->
+        <div class="order-details">
+          <!-- Delivery address only when delivery -->
+          <div *ngIf="orderType() === 'delivery'" class="field">
+            <label class="field-label">Delivery address</label>
+            <input
+              type="text"
+              [ngModel]="deliveryAddress()"
+              (ngModelChange)="deliveryAddress.set($event)"
+              placeholder="e.g., 12 Hope Road, Kingston"
+              class="field-input"
+            />
+            <p class="field-hint">Required for delivery orders.</p>
+          </div>
+
+          <!-- Notes for any order -->
+          <div class="field">
+            <label class="field-label">Order notes (optional)</label>
+            <textarea
+              rows="3"
+              [ngModel]="notes()"
+              (ngModelChange)="notes.set($event)"
+              placeholder="Special instructions? Allergies, no onions, extra napkins, etc."
+              class="field-textarea"
+            ></textarea>
+          </div>
+        </div>
+          <li *ngFor="let ci of cartItems()" class="cart-item">
+            <div>
+              <p class="cart-name">
+                {{ ci.item.name }}
+              </p>
+              <p class="cart-meta">
+                Qty {{ ci.quantity }} ×
+                {{ ci.item.price | currency : 'USD' }}
+              </p>
+            </div>
+            <span class="cart-line-total">
+              {{ ci.lineTotal | currency : 'USD' }}
+            </span>
+          </li>
+        </ul>
+
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span>Total</span>
+            <strong>{{ cartTotal() | currency : 'USD' }}</strong>
+          </div>
+             <p
+            *ngIf="orderType() === 'delivery' && cartItems().length > 0 && deliveryAddress().trim().length < 5"
+            class="error mini"
+          >
+            Please enter a delivery address to place a delivery order.
+          </p>
+          <button
+            type="button"
+            [disabled]="!canSubmit"
+            (click)="startCheckout()"
+          >
+            {{ submitting() ? 'Placing order...' : 'Place order' }}
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Past orders -->
+  <section class="history-section">
+    <h2 class="section-title">Your recent orders</h2>
+
+    <p *ngIf="myOrders().length === 0" class="empty-history">
+      You haven't placed any orders yet.
+    </p>
+
+    <div *ngIf="myOrders().length > 0" class="history-list">
+      <article *ngFor="let order of myOrders()" class="history-card">
+        <header class="history-header">
+          <div>
+            <p class="history-id">Order #{{ order.id }}</p>
+            <p class="history-meta">
+              {{ order.type | titlecase }} •
+              {{ order.status | titlecase }} •
+              {{ order.created_at | date : 'medium' }}
+            </p>
+          </div>
+          <div class="history-total">
+            {{ order.total_price | currency : 'USD' }}
+          </div>
+        </header>
+
+        <ul *ngIf="order.items?.length" class="history-items">
+          <li *ngFor="let it of order.items" class="history-item">
+            <span>{{ it.name }}</span>
+            <span class="history-item-meta">
+              Qty {{ it.quantity }} •
+              {{ it.price | currency : 'USD' }}
+            </span>
+          </li>
+        </ul>
+      </article>
+    </div>
+    <!-- Demo Payments Checkout Modal -->
+<div *ngIf="checkoutOpen()" class="modal-backdrop" (click)="closeCheckout()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Checkout • Demo Payments</h3>
+      <button type="button" class="modal-close" (click)="closeCheckout()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="muted" *ngIf="lastOrderId()">Order #{{ lastOrderId() }}</p>
+
+      <div *ngIf="creatingPayment() && !paymentId()" class="muted">
+        Creating payment session...
+      </div>
+
+      <div *ngIf="paymentId()" class="checkout-form">
+        <label class="field-label">Demo card number</label>
+        <input
+          class="field-input"
+          [ngModel]="cardNumber()"
+          (ngModelChange)="cardNumber.set($event)"
+          placeholder="4111 1111 1111 4242"
+        />
+
+        <div class="hint-box">
+          <p><b>Success:</b> ends with <code>4242</code></p>
+          <p><b>Fail:</b> ends with <code>0000</code></p>
+        </div>
+
+        <button
+          type="button"
+          class="pay-btn"
+          [disabled]="creatingPayment()"
+          (click)="confirmPayment()"
+        >
+          {{ creatingPayment() ? 'Processing...' : 'Pay Now' }}
+        </button>
+      </div>
+
+      <p *ngIf="payError()" class="error">{{ payError() }}</p>
+      <p *ngIf="paySuccess()" class="success">{{ paySuccess() }}</p>
+    </div>
+  </div>
+</div>
+
+  </section>
+</section>

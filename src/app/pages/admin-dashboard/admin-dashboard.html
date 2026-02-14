@@ -1,0 +1,218 @@
+<section class="page admin-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>SRMS overview</h1>
+      <p class="sub">
+        At-a-glance view of orders, reservations, events, and menu performance.
+      </p>
+    </div>
+
+    <button type="button" class="refresh" (click)="loadDashboard()">
+      Refresh
+    </button>
+  </header>
+
+  <p *ngIf="error()" class="error">{{ error() }}</p>
+
+  <div *ngIf="loading()" class="loading">
+    Loading dashboard…
+  </div>
+
+  <ng-container *ngIf="!loading() && stats() as s">
+    <!-- KPI cards -->
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <p class="kpi-label">Total orders</p>
+        <p class="kpi-value">{{ s.totalOrders }}</p>
+      </article>
+
+      <article class="kpi-card">
+        <p class="kpi-label">Total revenue</p>
+        <p class="kpi-value">{{ s.totalRevenue | currency : 'USD' }}</p>
+      </article>
+
+      <article class="kpi-card">
+        <p class="kpi-label">Reservations</p>
+        <p class="kpi-value">{{ s.totalReservations }}</p>
+        <p class="kpi-sub">
+          Pending: {{ s.pendingReservations }}
+        </p>
+      </article>
+
+      <article class="kpi-card">
+        <p class="kpi-label">Events</p>
+        <p class="kpi-value">{{ s.totalEvents }}</p>
+        <p class="kpi-sub">
+          Pending: {{ s.pendingEvents }}
+        </p>
+      </article>
+
+      <article class="kpi-card">
+        <p class="kpi-label">Customers</p>
+        <p class="kpi-value">{{ s.totalCustomers }}</p>
+      </article>
+    </section>
+
+    <!-- Two-column layout -->
+    <section class="grid-2">
+      <!-- Recent orders -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Recent orders</h2>
+        </div>
+
+        <p *ngIf="recentOrders().length === 0" class="empty">
+          No orders yet.
+        </p>
+
+        <table *ngIf="recentOrders().length > 0" class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Customer</th>
+              <th>When</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th class="right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of recentOrders()">
+              <td>{{ o.id }}</td>
+              <td>{{ o.customer_name }}</td>
+              <td>{{ o.created_at | date : 'short' }}</td>
+              <td>{{ o.type | titlecase }}</td>
+              <td>
+                <span class="status-pill" [class.pending]="o.status === 'pending'"
+                  [class.completed]="o.status === 'completed'"
+                  [class.cancelled]="o.status === 'cancelled'">
+                  {{ o.status | titlecase }}
+                </span>
+              </td>
+              <td class="right">
+                {{ o.total_price | currency : 'USD' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Top menu items -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Top menu items</h2>
+        </div>
+
+        <p *ngIf="topMenuItems().length === 0" class="empty">
+          No menu analytics yet.
+        </p>
+
+        <table *ngIf="topMenuItems().length > 0" class="data-table">
+          <thead>
+            <tr>
+              <th>Dish</th>
+              <th>Qty sold</th>
+              <th class="right">Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of topMenuItems()">
+              <td>{{ item.name }}</td>
+              <td>{{ item.total_quantity }}</td>
+              <td class="right">
+                {{ item.total_revenue | currency : 'USD' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Upcoming reservations & events -->
+    <section class="grid-2">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Upcoming reservations</h2>
+        </div>
+
+        <p *ngIf="upcomingReservations().length === 0" class="empty">
+          No upcoming reservations.
+        </p>
+
+        <table
+          *ngIf="upcomingReservations().length > 0"
+          class="data-table"
+        >
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Customer</th>
+              <th>Guests</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of upcomingReservations()">
+              <td>
+                {{ r.reservation_datetime | date : 'short' }}
+              </td>
+              <td>{{ r.customer_name }}</td>
+              <td>{{ r.number_of_guests }}</td>
+              <td>
+                <span
+                  class="status-pill"
+                  [class.pending]="r.status === 'pending'"
+                  [class.completed]="r.status === 'completed'"
+                  [class.cancelled]="r.status === 'cancelled'"
+                >
+                  {{ r.status | titlecase }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Upcoming events</h2>
+        </div>
+
+        <p *ngIf="upcomingEvents().length === 0" class="empty">
+          No upcoming events.
+        </p>
+
+        <table *ngIf="upcomingEvents().length > 0" class="data-table">
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Type</th>
+              <th>Customer</th>
+              <th>Guests</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of upcomingEvents()">
+              <td>{{ e.event_datetime | date : 'short' }}</td>
+              <td>{{ e.event_type | titlecase }}</td>
+              <td>{{ e.customer_name }}</td>
+              <td>{{ e.number_of_guests }}</td>
+              <td>
+                <span
+                  class="status-pill"
+                  [class.pending]="e.status === 'pending'"
+                  [class.completed]="e.status === 'completed'"
+                  [class.cancelled]="e.status === 'cancelled'"
+                >
+                  {{ e.status | titlecase }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </ng-container>
+</section>

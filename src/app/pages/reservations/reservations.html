@@ -1,0 +1,105 @@
+<section class="page reservations-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Reservations</p>
+      <h1>Book a table</h1>
+      <p class="sub">
+        Choose your date, time, and party size. Your request will be reviewed by
+        the staff.
+      </p>
+    </div>
+  </header>
+
+  <p *ngIf="error()" class="error">{{ error() }}</p>
+  <p *ngIf="success()" class="success">{{ success() }}</p>
+
+  <!-- Reservation form -->
+  <section class="form-card">
+    <form (ngSubmit)="submitReservation()" autocomplete="off">
+      <div class="field-row">
+        <label>
+          Date & time
+          <input
+            type="datetime-local"
+            [ngModel]="reservationDatetime()"
+            (ngModelChange)="reservationDatetime.set($event)"
+            name="reservationDatetime"
+            required
+          />
+        </label>
+
+        <label>
+          Guests
+          <input
+            type="number"
+            min="1"
+            max="20"
+            [ngModel]="numberOfGuests()"
+            (ngModelChange)="numberOfGuests.set($event)"
+            name="numberOfGuests"
+            required
+          />
+        </label>
+      </div>
+
+      <label class="notes-label">
+        Notes (optional)
+        <textarea
+          rows="3"
+          [ngModel]="notes()"
+          (ngModelChange)="notes.set($event)"
+          name="notes"
+          placeholder="Allergies, special occasions, seating preferences, etc."
+        ></textarea>
+      </label>
+
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Sending request...' : 'Request reservation' }}
+      </button>
+    </form>
+  </section>
+
+  <!-- Reservation history -->
+  <section class="history-section">
+    <h2 class="section-title">Your reservations</h2>
+
+    <p *ngIf="myReservations().length === 0" class="empty-history">
+      You don’t have any reservations yet.
+    </p>
+
+    <div *ngIf="myReservations().length > 0" class="history-list">
+      <article
+        *ngFor="let r of myReservations()"
+        class="history-card"
+      >
+        <header class="history-header">
+          <div>
+            <p class="history-date">
+              {{ r.reservation_datetime | date: 'fullDate' }}
+            </p>
+            <p class="history-meta">
+              {{ r.reservation_datetime | date: 'shortTime' }} •
+              {{ r.number_of_guests }} guest{{
+                r.number_of_guests > 1 ? 's' : ''
+              }}
+            </p>
+          </div>
+          <span class="status-pill" [class.pending]="r.status === 'pending'"
+            [class.approved]="r.status === 'approved'"
+            [class.cancelled]="r.status === 'cancelled'"
+          >
+            {{ r.status | titlecase }}
+          </span>
+        </header>
+
+        <p *ngIf="r.notes" class="history-notes">
+          {{ r.notes }}
+        </p>
+
+        <p class="history-created">
+          Requested {{ r.created_at | date: 'medium' }}
+        </p>
+      </article>
+    </div>
+  </section>
+</section>
