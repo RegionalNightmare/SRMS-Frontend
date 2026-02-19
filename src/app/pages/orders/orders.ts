@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common'
-
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from './../../core/api.config';
 
 interface MenuItem {
   id: number;

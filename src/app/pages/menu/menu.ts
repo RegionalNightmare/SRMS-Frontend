@@ -1,8 +1,7 @@
+import { API_BASE } from './../../core/api.config';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, CurrencyPipe, UpperCasePipe} from '@angular/common';
-
-const API_BASE = 'http://localhost:5000/api';
 
 interface MenuItem {
   id: number;

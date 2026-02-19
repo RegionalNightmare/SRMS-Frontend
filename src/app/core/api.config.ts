@@ -1,1 +1,1 @@
-export const API_BASE = 'http://localhost:5000/api';
+export const API_BASE = 'https://srms-backend-production-ce6d.up.railway.app/api';
