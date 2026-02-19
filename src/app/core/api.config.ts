@@ -1,1 +1,2 @@
-export const API_BASE = 'https://srms-backend-production-ce6d.up.railway.app/api';
+import { environment } from './../../environments/environment.prod';
+export const API_BASE = environment.apiBase;
