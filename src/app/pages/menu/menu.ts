@@ -63,4 +63,12 @@ export class Menu implements OnInit {
       },
     });
   }
+  imageUrl(item: MenuItem): string | null {
+  return item.image_url ? `${this.imageBase}${item.image_url}` : null;
+}
+
+handleImageError(event: any) {
+  // Hide broken images
+  event.target.style.display = 'none';
+}
 }
