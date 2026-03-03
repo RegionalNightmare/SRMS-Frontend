@@ -29,8 +29,9 @@ export class Menu implements OnInit {
   readonly imageBase = API_BASE.replace(/\/api\/?$/, '');
 
   constructor(
-    private http: HttpClient
-    private cdr: ChangeDetctorRef) {}
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadMenu();
