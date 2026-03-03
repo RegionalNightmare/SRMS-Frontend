@@ -1,0 +1,132 @@
+.auth-shell {
+  min-height: calc(100vh - 0px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(1200px 600px at 20% 10%, #1d4ed8 0%, transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, #9333ea 0%, transparent 55%),
+    linear-gradient(180deg, #0b1220, #090f1a);
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #e5e7eb;
+}
+
+.auth-header h2 {
+  margin: 0 0 6px 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.2px;
+}
+
+.sub {
+  margin: 0 0 16px 0;
+  color: rgba(229, 231, 235, 0.75);
+  line-height: 1.4;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field span {
+  font-size: 0.9rem;
+  color: rgba(229, 231, 235, 0.85);
+}
+
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+  color: #e5e7eb;
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(229, 231, 235, 0.45);
+}
+
+input:focus {
+  border-color: rgba(99, 102, 241, 0.8);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.20);
+}
+
+.btn {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: white;
+}
+
+.btn.ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(229, 231, 235, 0.9);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.row-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 6px 0;
+  color: rgba(229, 231, 235, 0.85);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.link:hover {
+  color: white;
+}
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  margin: 0 0 12px 0;
+}
+
+.alert.error {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #fecaca;
+}
+
+.alert.success {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #bbf7d0;
+}

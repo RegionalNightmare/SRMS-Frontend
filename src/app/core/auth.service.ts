@@ -80,6 +80,8 @@ export class AuthService {
     );
   }
 
+
+
   /** REGISTER */
   register(name: string, email: string, password: string) {
     console.log('[AuthService] register ->', email);
@@ -124,6 +126,17 @@ export class AuthService {
           throw new Error('Unexpected register response shape.');
         })
       );
+  }
+
+    /** FORGOT PASSWORD */
+  requestPasswordReset(email: string) {
+    console.log('[AuthService] requestPasswordReset ->', email);
+
+    return this.http.post<any>(`${API_BASE}/auth/forgot-password`, { email }).pipe(
+      tap((res) => {
+        console.log('[AuthService] reset response:', res);
+      })
+    );
   }
 
   logout() {

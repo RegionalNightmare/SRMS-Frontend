@@ -1,23 +1,85 @@
-<section class="auth-card">
-  <h2>Login</h2>
-  <p *ngIf="error" class="error">{{ error }}</p>
+<section class="auth-shell">
+  <div class="auth-card" role="region" aria-label="Authentication">
+    <header class="auth-header">
+      <h2>{{ forgotMode ? 'Reset Password' : 'Login' }}</h2>
+      <p class="sub">
+        {{ forgotMode
+          ? 'Enter your email and we’ll send a reset link.'
+          : 'Welcome back. Sign in to manage your restaurant.' }}
+      </p>
+    </header>
 
-  <form (ngSubmit)="submit()">
-    <label>
-      Email
-      <input type="email" [(ngModel)]="email" name="email" required />
-    </label>
+    <!-- Errors / Messages -->
+    <p *ngIf="error" class="alert error" role="alert">{{ error }}</p>
 
-    <label>
-      Password
-      <input
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-    </label>
+    <p *ngIf="resetMessage" class="alert success" role="status">
+      {{ resetMessage }}
+    </p>
 
-    <button type="submit">Login</button>
-  </form>
+    <!-- LOGIN FORM -->
+    <form *ngIf="!forgotMode" (ngSubmit)="submit()" class="form" novalidate>
+      <label class="field">
+        <span>Email</span>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="you@example.com"
+        />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          minlength="6"
+          autocomplete="current-password"
+          placeholder="••••••••"
+        />
+      </label>
+
+      <button class="btn primary" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">Login</span>
+        <span *ngIf="loading">Logging in…</span>
+      </button>
+
+      <div class="row-links">
+        <button type="button" class="link" (click)="openForgot()">
+          Forgot password?
+        </button>
+
+        <!-- Optional if you have register route -->
+        <a class="link" routerLink="/register">Create account</a>
+      </div>
+    </form>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <form *ngIf="forgotMode" (ngSubmit)="requestReset()" class="form" novalidate>
+      <label class="field">
+        <span>Email</span>
+        <input
+          type="email"
+          [(ngModel)]="resetEmail"
+          name="resetEmail"
+          required
+          autocomplete="email"
+          placeholder="you@example.com"
+        />
+      </label>
+
+      <button class="btn primary" type="submit" [disabled]="resetLoading">
+        <span *ngIf="!resetLoading">Send reset link</span>
+        <span *ngIf="resetLoading">Sending…</span>
+      </button>
+
+      <button type="button" class="btn ghost" (click)="closeForgot()" [disabled]="resetLoading">
+        Back to login
+      </button>
+    </form>
+  </div>
 </section>

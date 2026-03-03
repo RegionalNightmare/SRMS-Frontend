@@ -12,15 +12,23 @@ import { AuthService } from '../../core/auth.service';
   styleUrls: ['./login.css'],
 })
 export class Login {
-   email = '';
+  email = '';
   password = '';
   error = '';
+
   loading = false;
+
+  // Forgot password
+  forgotMode = false;
+  resetEmail = '';
+  resetLoading = false;
+  resetMessage = '';
 
   constructor(private auth: AuthService, private router: Router) {}
 
   submit() {
     this.error = '';
+    this.resetMessage = '';
 
     if (!this.email || !this.password) {
       this.error = 'Please enter your email and password.';
@@ -32,16 +40,55 @@ export class Login {
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
         this.loading = false;
-        console.log('[LoginComponent] login complete, navigating to home.');
         this.router.navigateByUrl('/');
       },
       error: (err) => {
         this.loading = false;
-        console.error('[LoginComponent] login error:', err);
         this.error =
-          err.error?.message ||
-          err.message ||
+          err?.error?.message ||
+          err?.message ||
           'Login failed. Please check your credentials.';
+      },
+    });
+  }
+
+  openForgot() {
+    this.error = '';
+    this.resetMessage = '';
+    this.forgotMode = true;
+    this.resetEmail = this.email || '';
+  }
+
+  closeForgot() {
+    this.error = '';
+    this.resetMessage = '';
+    this.forgotMode = false;
+  }
+
+  requestReset() {
+    this.error = '';
+    this.resetMessage = '';
+
+    if (!this.resetEmail) {
+      this.error = 'Please enter your email to reset your password.';
+      return;
+    }
+
+    this.resetLoading = true;
+
+    // Expecting AuthService method. See snippet below.
+    this.auth.requestPasswordReset(this.resetEmail).subscribe({
+      next: () => {
+        this.resetLoading = false;
+        this.resetMessage =
+          'If an account exists for that email, a reset link has been sent.';
+      },
+      error: (err) => {
+        this.resetLoading = false;
+        this.error =
+          err?.error?.message ||
+          err?.message ||
+          'Could not send reset email. Please try again.';
       },
     });
   }
