@@ -19,6 +19,13 @@
     *ngIf="!loading && menuItems && menuItems.length > 0"
   >
     <article class="dish-card" *ngFor="let item of menuItems">
+      <div class="dish-image" *ngIf="item.image_url">
+    <img 
+      [src]="imageBase + item.image_url" 
+      [alt]="item.name"
+      (error)="handleImageError($event)"
+    />
+  </div>
       <div class="dish-top">
         <div class="dish-head">
           <p class="dish-name">{{ item.name }}</p>

@@ -1,5 +1,5 @@
 import { API_BASE } from './../../core/api.config';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, CurrencyPipe, UpperCasePipe} from '@angular/common';
 
@@ -28,7 +28,10 @@ export class Menu implements OnInit {
 
   readonly imageBase = API_BASE.replace(/\/api\/?$/, '');
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadMenu();
@@ -60,7 +63,16 @@ export class Menu implements OnInit {
         console.error('[Menu] loadMenu error', err);
         this.loading = false;
         this.error = err.error?.message || 'Failed to load menu.';
+        this.cdr.detectChanges();
       },
     });
   }
+  imageUrl(item: MenuItem): string | null {
+  return item.image_url ? `${this.imageBase}${item.image_url}` : null;
+}
+
+handleImageError(event: any) {
+  // Hide broken images
+  event.target.style.display = 'none';
+}
 }
