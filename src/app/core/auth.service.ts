@@ -132,7 +132,7 @@ export class AuthService {
   requestPasswordReset(email: string) {
     console.log('[AuthService] requestPasswordReset ->', email);
 
-    return this.http.post<any>(`${API_BASE}/auth/forgot-password`, { email }).pipe(
+    return this.http.post<any>(`${API_BASE}/api/auth/forgot-password`, { email }).pipe(
       tap((res) => {
         console.log('[AuthService] reset response:', res);
       })
