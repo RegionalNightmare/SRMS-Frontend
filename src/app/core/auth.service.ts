@@ -10,6 +10,8 @@ export interface User {
   role: 'admin' | 'customer';
 }
 
+console.log('[AuthService] API_BASE =', API_BASE);
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly tokenKey = 'srmsToken';
