@@ -1,132 +1,139 @@
-.auth-shell {
-  min-height: calc(100vh - 0px);
+/* Page background to match the rest of SRMS */
+.auth-page {
+  min-height: calc(100vh - 72px); /* adjust if your navbar height differs */
   display: grid;
   place-items: center;
-  padding: 24px;
-  background: radial-gradient(1200px 600px at 20% 10%, #1d4ed8 0%, transparent 60%),
-    radial-gradient(900px 500px at 90% 30%, #9333ea 0%, transparent 55%),
-    linear-gradient(180deg, #0b1220, #090f1a);
+  padding: 32px 16px;
+
+  /* dark, subtle glow like your menu page */
+  background:
+    radial-gradient(900px 500px at 50% 0%, rgba(59, 130, 246, 0.18) 0%, transparent 60%),
+    radial-gradient(700px 420px at 80% 35%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #050814 0%, #070b18 40%, #050814 100%);
 }
 
+/* Card matches your menu cards */
 .auth-card {
   width: min(420px, 100%);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 16px;
   padding: 22px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #e5e7eb;
+  border-radius: 16px;
+
+  background: rgba(8, 12, 26, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 14px 45px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.auth-header h2 {
+/* Title/subtitle typography */
+.auth-card h2 {
   margin: 0 0 6px 0;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   letter-spacing: 0.2px;
 }
 
-.sub {
+.auth-card .sub {
   margin: 0 0 16px 0;
-  color: rgba(229, 231, 235, 0.75);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.70);
   line-height: 1.4;
 }
 
-.form {
-  display: grid;
-  gap: 12px;
-}
-
-.field {
+/* Labels + inputs */
+label {
   display: grid;
   gap: 6px;
-}
-
-.field span {
+  margin-bottom: 12px;
   font-size: 0.9rem;
-  color: rgba(229, 231, 235, 0.85);
+  color: rgba(255, 255, 255, 0.78);
 }
 
 input {
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+
   background: rgba(0, 0, 0, 0.25);
-  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.92);
+
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input::placeholder {
-  color: rgba(229, 231, 235, 0.45);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 input:focus {
-  border-color: rgba(99, 102, 241, 0.8);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.20);
+  border-color: rgba(245, 158, 11, 0.65); /* SRMS yellow accent */
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
-.btn {
+/* Button to match site look */
+button[type="submit"] {
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid transparent;
-  font-weight: 600;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+
+  background: rgba(245, 158, 11, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+
   cursor: pointer;
+  transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
-.btn.primary {
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  color: white;
+button[type="submit"]:hover {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.55);
 }
 
-.btn.ghost {
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.18);
-  color: rgba(229, 231, 235, 0.9);
+button[type="submit"]:active {
+  transform: translateY(1px);
 }
 
-.btn:disabled {
+button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* Error text */
+.error {
+  margin: 0 0 12px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: rgba(254, 202, 202, 0.95);
+}
+
+/* Links row */
 .row-links {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2px;
+  margin-top: 10px;
 }
 
-.link {
+.link,
+.row-links a {
   background: none;
   border: none;
   padding: 6px 0;
-  color: rgba(229, 231, 235, 0.85);
+  font: inherit;
+  color: rgba(255, 255, 255, 0.70);
   text-decoration: underline;
   cursor: pointer;
-  font: inherit;
 }
 
-.link:hover {
-  color: white;
+.link:hover,
+.row-links a:hover {
+  color: rgba(245, 158, 11, 0.95); /* yellow accent on hover */
 }
 
-.alert {
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  margin: 0 0 12px 0;
-}
-
-.alert.error {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.35);
-  color: #fecaca;
-}
-
-.alert.success {
-  background: rgba(34, 197, 94, 0.12);
-  border-color: rgba(34, 197, 94, 0.35);
-  color: #bbf7d0;
-}
