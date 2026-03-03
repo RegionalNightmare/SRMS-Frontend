@@ -142,7 +142,11 @@ export class AuthService {
   }
 /** RESET PASSWORD */
 resetPassword(email: string, token: string, newPassword: string) {
-  console.log('[AuthService] resetPassword ->', email);
+  console.log('[AuthService] resetPassword payload:', {
+    email,
+    tokenPreview: token ? token.slice(0, 10) + '...' : '(missing)',
+    newPasswordLength: newPassword?.length ?? 0,
+  });
 
   return this.http.post<any>(`${API_BASE}/auth/reset-password`, {
     email,

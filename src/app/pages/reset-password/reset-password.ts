@@ -55,6 +55,12 @@ export class ResetPassword {
 
     this.loading = true;
 
+    console.log('[ResetPassword] sending:', {
+  email: this.email,
+  token: this.token,
+  newPasswordLength: this.newPassword?.length
+});
+
     this.auth.resetPassword(this.email, this.token, this.newPassword).subscribe({
       next: (res) => {
         this.loading = false;
