@@ -24,6 +24,12 @@ export const routes: Routes = [
       import('./pages/register/register').then((m) => m.Register),
   },
 
+  {
+  path: 'reset-password',
+  loadComponent: () =>
+    import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
+},
+
  {
     path: 'orders',
     canActivate: [authGuard],
@@ -42,6 +48,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/events/events').then((m) => m.Events),
   },
+  
   {
     path: 'admin',
     canActivate: [authGuard, adminGuard],
@@ -49,12 +56,6 @@ export const routes: Routes = [
       import('./pages/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
   },
 
-  {
-    path: 'admin',
-    canActivate: [authGuard, adminGuard],
-    loadComponent: () =>
-      import('./pages/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
-  },
   {
     path: 'admin/menu',
     canActivate: [authGuard, adminGuard],

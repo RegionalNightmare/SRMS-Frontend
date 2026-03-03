@@ -10,8 +10,6 @@ export interface User {
   role: 'admin' | 'customer';
 }
 
-console.log('[AuthService] API_BASE =', API_BASE);
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly tokenKey = 'srmsToken';
@@ -140,6 +138,17 @@ export class AuthService {
       })
     );
   }
+
+  /** RESET PASSWORD */
+resetPassword(email: string, token: string, newPassword: string) {
+  console.log('[AuthService] resetPassword ->', email);
+
+  return this.http.post<any>(`${API_BASE}/auth/reset-password`, {
+    email,
+    token,
+    newPassword,
+  });
+}
 
   logout() {
     console.log('[AuthService] logout');
