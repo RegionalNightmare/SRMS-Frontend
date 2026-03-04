@@ -1,14 +1,13 @@
+import { Navbar } from './layout/navbar/navbar';
 import { ChatbotComponent } from './shared/chatbot/chat.component';
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './core/auth.service';
-
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgIf, ChatbotComponent],
+  imports: [RouterOutlet, ChatbotComponent, Navbar], // ✅ add Navbar here
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

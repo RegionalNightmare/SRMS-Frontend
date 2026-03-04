@@ -47,3 +47,9 @@ h4 {
   font-size: 0.85rem;
   color: #9ca3af;
 }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}

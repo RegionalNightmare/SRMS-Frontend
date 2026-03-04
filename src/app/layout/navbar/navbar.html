@@ -1,39 +1,94 @@
-<nav class="nav">
-  <div class="nav-left">
-    <a routerLink="/" class="brand">SRMS</a>
-  </div>
+<header class="nav-wrap">
+  <nav class="nav" aria-label="Primary">
+    <a routerLink="/" class="brand" (click)="closeMenu()">ARMS</a>
 
-  <div class="nav-center">
-    <a routerLink="/menu" routerLinkActive="active">Menu</a>
-    <a *ngIf="auth.isLoggedIn()" routerLink="/orders" routerLinkActive="active">
-      Orders
-    </a>
-    <a
-      *ngIf="auth.isLoggedIn()"
-      routerLink="/reservations"
-      routerLinkActive="active"
+    <!-- Desktop links -->
+    <div class="nav-links desktop">
+      <a routerLink="/menu" routerLinkActive="active" (click)="closeMenu()">Menu</a>
+
+      <a *ngIf="auth.isLoggedIn()" routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">
+        Orders
+      </a>
+      <a *ngIf="auth.isLoggedIn()" routerLink="/reservations" routerLinkActive="active" (click)="closeMenu()">
+        Reservations
+      </a>
+      <a *ngIf="auth.isLoggedIn()" routerLink="/events" routerLinkActive="active" (click)="closeMenu()">
+        Events
+      </a>
+
+      <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">
+        Admin
+      </a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/menu" routerLinkActive="active" (click)="closeMenu()">Admin Menu</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/orders" routerLinkActive="active" (click)="closeMenu()">Admin Orders</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/reservations" routerLinkActive="active" (click)="closeMenu()">Admin Reservations</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/events" routerLinkActive="active" (click)="closeMenu()">Admin Events</a>
+    </div>
+
+    <!-- Right side (desktop) -->
+    <div class="nav-auth desktop">
+      <ng-container *ngIf="auth.isLoggedIn(); else guestLinksDesktop">
+        <span class="nav-user">
+          {{ auth.currentUser?.name || auth.currentUser?.email }}
+        </span>
+        <button type="button" class="nav-btn" (click)="logout()">Logout</button>
+      </ng-container>
+
+      <ng-template #guestLinksDesktop>
+        <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        <a routerLink="/register" routerLinkActive="active" (click)="closeMenu()">Register</a>
+      </ng-template>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      type="button"
+      class="hamburger mobile"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen"
+      aria-controls="mobileMenu"
+      aria-label="Toggle menu"
     >
-      Reservations
-    </a>
-    <a *ngIf="auth.isLoggedIn()" routerLink="/events" routerLinkActive="active">
-      Events
-    </a>
-    <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active">
-      Admin
-    </a>
-  </div>
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-  <div class="nav-right">
-    <ng-container *ngIf="auth.isLoggedIn(); else guestLinks">
-      <span class="user-label">
-        {{ auth.currentUser?.name }} ({{ auth.currentUser?.role }})
-      </span>
-      <button (click)="logout()">Logout</button>
-    </ng-container>
+  <!-- Mobile overlay -->
+  <div class="overlay" *ngIf="menuOpen" (click)="closeMenu()" aria-hidden="true"></div>
 
-    <ng-template #guestLinks>
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/register" routerLinkActive="active">Register</a>
-    </ng-template>
-  </div>
-</nav>
+  <!-- Mobile drawer -->
+  <aside class="drawer" [class.open]="menuOpen" id="mobileMenu">
+    <div class="drawer-head">
+      <span class="drawer-title">Menu</span>
+      <button type="button" class="icon-btn" (click)="closeMenu()" aria-label="Close menu">✕</button>
+    </div>
+
+    <div class="drawer-links">
+      <a routerLink="/menu" routerLinkActive="active" (click)="closeMenu()">Menu</a>
+
+      <a *ngIf="auth.isLoggedIn()" routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
+      <a *ngIf="auth.isLoggedIn()" routerLink="/reservations" routerLinkActive="active" (click)="closeMenu()">Reservations</a>
+      <a *ngIf="auth.isLoggedIn()" routerLink="/events" routerLinkActive="active" (click)="closeMenu()">Events</a>
+
+      <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/menu" routerLinkActive="active" (click)="closeMenu()">Admin Menu</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/orders" routerLinkActive="active" (click)="closeMenu()">Admin Orders</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/reservations" routerLinkActive="active" (click)="closeMenu()">Admin Reservations</a>
+      <a *ngIf="auth.isAdmin()" routerLink="/admin/events" routerLinkActive="active" (click)="closeMenu()">Admin Events</a>
+    </div>
+
+    <div class="drawer-auth">
+      <ng-container *ngIf="auth.isLoggedIn(); else guestLinksMobile">
+        <div class="drawer-user">
+          {{ auth.currentUser?.name || auth.currentUser?.email }}
+        </div>
+        <button type="button" class="nav-btn full" (click)="logout()">Logout</button>
+      </ng-container>
+
+      <ng-template #guestLinksMobile>
+        <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        <a routerLink="/register" routerLinkActive="active" (click)="closeMenu()">Register</a>
+      </ng-template>
+    </div>
+  </aside>
+</header>
