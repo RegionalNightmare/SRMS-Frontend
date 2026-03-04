@@ -18,10 +18,14 @@
     class="menu-grid"
     *ngIf="!loading && menuItems && menuItems.length > 0"
   >
-    <article class="dish-card" *ngFor="let item of menuItems">
+    <article
+  class="dish-card clickable"
+  *ngFor="let item of menuItems"
+  routerLink="/orders"
+>
       <div class="dish-image" *ngIf="item.image_url">
-    <img 
-      [src]="imageBase + item.image_url" 
+    <img
+      [src]="imageBase + item.image_url"
       [alt]="item.name"
       (error)="handleImageError($event)"
     />
@@ -55,12 +59,7 @@
     </article>
   </section>
 
-  <p
-    *ngIf="!loading && menuItems && menuItems.length === 0"
-    class="empty"
-  >
-    No menu items found yet.
-  </p>
+  
 
   <!-- Specials / deals banner -->
   <section class="menu-specials">

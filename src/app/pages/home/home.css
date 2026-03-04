@@ -171,3 +171,23 @@
     max-width: 100%;
   }
 }
+
+.btn.small{
+  padding: 0.55rem 1.15rem;
+  font-size: 0.82rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.95); /* orange */
+  color: #111827;
+  border: 1px solid rgba(251, 191, 36, 0.9);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+}
+
+.btn.small:hover{
+  background: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.btn.small:focus-visible{
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
