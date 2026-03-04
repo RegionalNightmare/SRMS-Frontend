@@ -93,9 +93,14 @@ creatingPayment = signal(false);
     });
   }
 
-  imageUrl(item: MenuItem): string | null {
-    return item.image_url ? `${this.imageBase}${item.image_url}` : null;
-  }
+imageUrl(item: MenuItem): string | null {
+  if (!item.image_url) return null;
+
+  const base = this.imageBase.replace(/\/$/, '');
+  const path = item.image_url.startsWith('/') ? item.image_url : `/${item.image_url}`;
+
+  return `${base}${path}`;
+}
 
   updateQuantity(itemId: number, value: string) {
     const qty = Math.max(0, Number.parseInt(value || '0', 10) || 0);

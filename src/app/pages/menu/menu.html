@@ -7,6 +7,7 @@
       Browse the dishes, then place an order or add notes for your reservation
       or event.
     </p>
+
   </header>
 
   <!-- Status messages -->
@@ -21,7 +22,10 @@
     <article
   class="dish-card clickable"
   *ngFor="let item of menuItems"
-  routerLink="/orders"
+  (click)="goToOrders()"
+  role="button"
+  tabindex="0"
+  (keydown.enter)="goToOrders()"
 >
       <div class="dish-image" *ngIf="item.image_url">
     <img
@@ -57,49 +61,5 @@
         </span>
       </div>
     </article>
-  </section>
-
-  
-
-  <!-- Specials / deals banner -->
-  <section class="menu-specials">
-    <div class="special-hero">
-      <p class="special-eyebrow">Specials & Combos</p>
-      <h2>Make tonight extra special.</h2>
-      <p class="special-sub">
-        Try one of our featured deals — perfect for a quick bite, a cozy dinner,
-        or feeding the whole crew. Ask your server or add a note when placing an
-        order.
-      </p>
-    </div>
-
-    <div class="special-grid">
-      <article class="special-card">
-        <p class="special-label">Tonight</p>
-        <h3>Two-for-Tuesday</h3>
-        <p class="special-text">Any 2 mains for $24.99</p>
-        <p class="special-foot">
-          Ideal for date night or sharing with a friend.
-        </p>
-      </article>
-
-      <article class="special-card">
-        <p class="special-label">Weekday special</p>
-        <h3>Lunch Combo</h3>
-        <p class="special-text">Slice + side + drink $11.99</p>
-        <p class="special-foot">
-          Weekdays 11am–3pm. Quick, hot, and affordable.
-        </p>
-      </article>
-
-      <article class="special-card">
-        <p class="special-label">Best value</p>
-        <h3>Family Feast</h3>
-        <p class="special-text">Feeds 4–5 for $49.99</p>
-        <p class="special-foot">
-          Mix of mains, sides, and sharables for the whole table.
-        </p>
-      </article>
-    </div>
   </section>
 </section>

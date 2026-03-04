@@ -217,6 +217,8 @@
   font-size: 0.76rem;
 }
 
+.dish-card.clickable { cursor: pointer; }
+.dish-card.clickable:hover { border-color: rgba(245,158,11,0.6); }
 @media (max-width: 700px) {
   .page.menu-page {
     margin: 1.5rem auto;

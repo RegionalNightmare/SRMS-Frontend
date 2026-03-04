@@ -2,6 +2,8 @@ import { API_BASE } from './../../core/api.config';
 import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, CurrencyPipe, UpperCasePipe} from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 
 interface MenuItem {
   id: number;
@@ -30,7 +32,9 @@ export class Menu implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -46,16 +50,16 @@ export class Menu implements OnInit {
         console.log('[Menu] raw response:', rows);
 
         // map DB rows -> MenuItem[]
-        this.menuItems = (rows || []).map((row) => ({
-          id: row.id,
-          name: row.name,
-          category: row.category,
-          description: row.description,
-          price: row.price,
-          // DB uses tinyint(1) 0/1; convert to boolean
-          available: row.available === 1 || row.available === true,
-          dietary_tags: row.dietary_tags ?? null,
-        }));
+       this.menuItems = (rows || []).map((row) => ({
+  id: row.id,
+  name: row.name,
+  category: row.category,
+  description: row.description,
+  price: row.price,
+  image_url: row.image_url ?? null,
+  available: row.available === 1 || row.available === true,
+  dietary_tags: row.dietary_tags ?? null,
+}));
 
         this.loading = false;
       },
@@ -68,11 +72,27 @@ export class Menu implements OnInit {
     });
   }
   imageUrl(item: MenuItem): string | null {
-  return item.image_url ? `${this.imageBase}${item.image_url}` : null;
+  if (!item.image_url) return null;
+
+  const base = this.imageBase.replace(/\/$/, '');
+  const path = item.image_url.startsWith('/') ? item.image_url : `/${item.image_url}`;
+
+  return `${base}${path}`;
 }
 
 handleImageError(event: any) {
   // Hide broken images
   event.target.style.display = 'none';
 }
+
+goToOrders() {
+  // Orders route is protected; if not logged in, send them to login first
+  if (!this.auth.isLoggedIn()) {
+    this.router.navigateByUrl('/login');
+    return;
+  }
+  this.router.navigateByUrl('/orders');
 }
+};
+
+
