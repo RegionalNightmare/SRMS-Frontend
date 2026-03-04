@@ -113,14 +113,23 @@
 
 .app-main {
   flex: 1;
-  padding: 1.5rem 0 3rem;
+  padding: 1.25rem 0 2.5rem;
 }
 
 .app-main-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0;
 }
+
+/* Mobile: tighter top/bottom padding */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem 0 2rem;
+  }
+}
+
+
 
 /* Small screens */
 

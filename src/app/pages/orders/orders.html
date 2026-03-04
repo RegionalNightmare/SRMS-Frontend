@@ -89,52 +89,50 @@
         <p class="hint">Set quantity above 0 on any dish to add it here.</p>
       </div>
 
-      <div *ngIf="cartItems().length > 0" class="cart-panel">
-        <ul class="cart-list">
-          <!-- Order details -->
-        <div class="order-details">
-          <!-- Delivery address only when delivery -->
-          <div *ngIf="orderType() === 'delivery'" class="field">
-            <label class="field-label">Delivery address</label>
-            <input
-              type="text"
-              [ngModel]="deliveryAddress()"
-              (ngModelChange)="deliveryAddress.set($event)"
-              placeholder="e.g., 12 Hope Road, Kingston"
-              class="field-input"
-            />
-            <p class="field-hint">Required for delivery orders.</p>
-          </div>
+      <div class="cart-panel">
+  <!-- Order details -->
+  <div class="order-details">
+    <!-- Delivery address only when delivery -->
+    <div *ngIf="orderType() === 'delivery'" class="field">
+      <label class="field-label">Delivery address</label>
+      <input
+        type="text"
+        [ngModel]="deliveryAddress()"
+        (ngModelChange)="deliveryAddress.set($event)"
+        placeholder="e.g., 12 Hope Road, Kingston"
+        class="field-input"
+      />
+      <p class="field-hint">Required for delivery orders.</p>
+    </div>
 
-          <!-- Notes for any order -->
-          <div class="field">
-            <label class="field-label">Order notes (optional)</label>
-            <textarea
-              rows="3"
-              [ngModel]="notes()"
-              (ngModelChange)="notes.set($event)"
-              placeholder="Special instructions? Allergies, no onions, extra napkins, etc."
-              class="field-textarea"
-            ></textarea>
-          </div>
-        </div>
-          <li *ngFor="let ci of cartItems()" class="cart-item">
-            <div>
-              <p class="cart-name">
-                {{ ci.item.name }}
-              </p>
-              <p class="cart-meta">
-                Qty {{ ci.quantity }} ×
-                {{ ci.item.price | currency : 'USD' }}
-              </p>
-            </div>
-            <span class="cart-line-total">
-              {{ ci.lineTotal | currency : 'USD' }}
-            </span>
-          </li>
-        </ul>
+    <!-- Notes for any order -->
+    <div class="field">
+      <label class="field-label">Order notes (optional)</label>
+      <textarea
+        rows="3"
+        [ngModel]="notes()"
+        (ngModelChange)="notes.set($event)"
+        placeholder="Special instructions? Allergies, no onions, extra napkins, etc."
+        class="field-textarea"
+      ></textarea>
+    </div>
+  </div>
 
-        <div class="cart-footer">
+  <ul class="cart-list">
+    <li *ngFor="let ci of cartItems()" class="cart-item">
+      <div>
+        <p class="cart-name">{{ ci.item.name }}</p>
+        <p class="cart-meta">
+          Qty {{ ci.quantity }} × {{ ci.item.price | currency : 'USD' }}
+        </p>
+      </div>
+      <span class="cart-line-total">
+        {{ ci.lineTotal | currency : 'USD' }}
+      </span>
+    </li>
+  </ul>
+
+  <div class="cart-footer">
           <div class="cart-total">
             <span>Total</span>
             <strong>{{ cartTotal() | currency : 'USD' }}</strong>
