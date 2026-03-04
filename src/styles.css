@@ -12,6 +12,15 @@ body {
   height: 100%;
 }
 
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+app-root, .app-shell {
+  overflow-x: hidden;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
