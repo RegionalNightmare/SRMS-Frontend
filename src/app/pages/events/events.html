@@ -64,21 +64,27 @@
         </p>
 
         <div class="menu-select-grid">
-          <label
-            *ngFor="let item of menu()"
-            class="menu-pill"
-          >
-            <input
-              type="checkbox"
-              [checked]="selectedMenuIds().has(item.id)"
-              (change)="toggleMenuSelection(item.id, $any($event.target).checked)"
-            />
-            <span>
-              <strong>{{ item.name }}</strong>
-              <span class="pill-category">• {{ item.category }}</span>
-            </span>
-          </label>
-        </div>
+  <label
+    *ngFor="let item of menu()"
+    class="menu-pill"
+    [class.selected]="selectedMenuIds().has(item.id)"
+  >
+    <input
+      type="checkbox"
+      [checked]="selectedMenuIds().has(item.id)"
+      (change)="toggleMenuSelection(item.id, $any($event.target).checked)"
+    />
+
+    <span class="menu-pill-check" aria-hidden="true">
+      {{ selectedMenuIds().has(item.id) ? '✓' : '+' }}
+    </span>
+
+    <span class="menu-pill-text">
+      <strong>{{ item.name }}</strong>
+      <span class="pill-category">{{ item.category }}</span>
+    </span>
+  </label>
+</div>
       </div>
 
       <button type="submit" [disabled]="submitting()">
