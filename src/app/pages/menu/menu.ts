@@ -42,35 +42,35 @@ export class Menu implements OnInit {
   }
 
   loadMenu() {
-    this.loading = true;
-    this.error = '';
+  this.loading = true;
+  this.error = '';
 
-    this.http.get<any[]>(`${API_BASE}/menu`).subscribe({
-      next: (rows) => {
-        console.log('[Menu] raw response:', rows);
+  this.http.get<any[]>(`${API_BASE}/menu`).subscribe({
+    next: (rows) => {
+      console.log('[Menu] raw response:', rows);
 
-        // map DB rows -> MenuItem[]
-       this.menuItems = (rows || []).map((row) => ({
-  id: row.id,
-  name: row.name,
-  category: row.category,
-  description: row.description,
-  price: row.price,
-  image_url: row.image_url ?? null,
-  available: row.available === 1 || row.available === true,
-  dietary_tags: row.dietary_tags ?? null,
-}));
+      this.menuItems = (rows || []).map((row) => ({
+        id: row.id,
+        name: row.name,
+        category: row.category,
+        description: row.description,
+        price: Number(row.price),
+        image_url: row.image_url ?? null,
+        available: row.available === 1 || row.available === true,
+        dietary_tags: row.dietary_tags ?? null,
+      }));
 
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('[Menu] loadMenu error', err);
-        this.loading = false;
-        this.error = err.error?.message || 'Failed to load menu.';
-        this.cdr.detectChanges();
-      },
-    });
-  }
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('[Menu] loadMenu error', err);
+      this.loading = false;
+      this.error = err.error?.message || 'Failed to load menu.';
+      this.cdr.detectChanges();
+    },
+  });
+}
   imageUrl(item: MenuItem): string | null {
   if (!item.image_url) return null;
 
