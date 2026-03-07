@@ -12,26 +12,49 @@ import { AuthService } from '../../core/auth.service';
 })
 export class Navbar {
   menuOpen = false;
+  adminMenuOpen = false;
+  mobileAdminMenuOpen = false;
 
   constructor(public auth: AuthService, private router: Router) {}
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+    if (!this.menuOpen) {
+      this.mobileAdminMenuOpen = false;
+    }
   }
 
   closeMenu() {
     this.menuOpen = false;
+    this.mobileAdminMenuOpen = false;
+  }
+
+  toggleAdminMenu() {
+    this.adminMenuOpen = !this.adminMenuOpen;
+  }
+
+  openAdminMenu() {
+    this.adminMenuOpen = true;
+  }
+
+  closeAdminMenu() {
+    this.adminMenuOpen = false;
+  }
+
+  toggleMobileAdminMenu() {
+    this.mobileAdminMenuOpen = !this.mobileAdminMenuOpen;
   }
 
   logout() {
     this.auth.logout();
     this.closeMenu();
+    this.closeAdminMenu();
     this.router.navigateByUrl('/login');
   }
 
-  // Escape closes menu (accessibility)
   @HostListener('document:keydown.escape')
   onEscape() {
     this.closeMenu();
+    this.closeAdminMenu();
   }
 }

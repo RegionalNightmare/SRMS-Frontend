@@ -16,13 +16,33 @@
         Events
       </a>
 
-      <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">
-        Admin
-      </a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/menu" routerLinkActive="active" (click)="closeMenu()">Admin Menu</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/orders" routerLinkActive="active" (click)="closeMenu()">Admin Orders</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/reservations" routerLinkActive="active" (click)="closeMenu()">Admin Reservations</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/events" routerLinkActive="active" (click)="closeMenu()">Admin Events</a>
+      <!-- Desktop admin dropdown -->
+      <div
+        *ngIf="auth.isAdmin()"
+        class="admin-dropdown"
+        (mouseenter)="openAdminMenu()"
+        (mouseleave)="closeAdminMenu()"
+      >
+        <button
+          type="button"
+          class="admin-trigger"
+          [class.active]="adminMenuOpen"
+          (click)="toggleAdminMenu()"
+          aria-haspopup="true"
+          [attr.aria-expanded]="adminMenuOpen"
+        >
+          Admin
+          <span class="caret">▾</span>
+        </button>
+
+        <div class="admin-dropdown-menu" *ngIf="adminMenuOpen">
+          <a routerLink="/admin" routerLinkActive="active" (click)="closeAdminMenu()">Dashboard</a>
+          <a routerLink="/admin/menu" routerLinkActive="active" (click)="closeAdminMenu()">Menu</a>
+          <a routerLink="/admin/orders" routerLinkActive="active" (click)="closeAdminMenu()">Orders</a>
+          <a routerLink="/admin/reservations" routerLinkActive="active" (click)="closeAdminMenu()">Reservations</a>
+          <a routerLink="/admin/events" routerLinkActive="active" (click)="closeAdminMenu()">Events</a>
+        </div>
+      </div>
     </div>
 
     <!-- Right side (desktop) -->
@@ -70,11 +90,26 @@
       <a *ngIf="auth.isLoggedIn()" routerLink="/reservations" routerLinkActive="active" (click)="closeMenu()">Reservations</a>
       <a *ngIf="auth.isLoggedIn()" routerLink="/events" routerLinkActive="active" (click)="closeMenu()">Events</a>
 
-      <a *ngIf="auth.isAdmin()" routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/menu" routerLinkActive="active" (click)="closeMenu()">Admin Menu</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/orders" routerLinkActive="active" (click)="closeMenu()">Admin Orders</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/reservations" routerLinkActive="active" (click)="closeMenu()">Admin Reservations</a>
-      <a *ngIf="auth.isAdmin()" routerLink="/admin/events" routerLinkActive="active" (click)="closeMenu()">Admin Events</a>
+      <!-- Mobile admin accordion -->
+      <div *ngIf="auth.isAdmin()" class="drawer-admin">
+        <button
+          type="button"
+          class="drawer-admin-trigger"
+          (click)="toggleMobileAdminMenu()"
+          [attr.aria-expanded]="mobileAdminMenuOpen"
+        >
+          <span>Admin tools</span>
+          <span class="caret" [class.rotate]="mobileAdminMenuOpen">▾</span>
+        </button>
+
+        <div class="drawer-admin-links" *ngIf="mobileAdminMenuOpen">
+          <a routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+          <a routerLink="/admin/menu" routerLinkActive="active" (click)="closeMenu()">Menu</a>
+          <a routerLink="/admin/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
+          <a routerLink="/admin/reservations" routerLinkActive="active" (click)="closeMenu()">Reservations</a>
+          <a routerLink="/admin/events" routerLinkActive="active" (click)="closeMenu()">Events</a>
+        </div>
+      </div>
     </div>
 
     <div class="drawer-auth">
