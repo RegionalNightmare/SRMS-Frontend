@@ -75,6 +75,19 @@
       </label>
 
       <label>
+  Image
+  <input
+    type="file"
+    accept="image/*"
+    (change)="onCreateImageSelected($event)"
+  />
+</label>
+
+<div *ngIf="createImagePreview()" class="image-preview">
+  <img [src]="createImagePreview()" alt="Selected preview" />
+</div>
+
+      <label>
         Dietary tags
         <input
           type="text"

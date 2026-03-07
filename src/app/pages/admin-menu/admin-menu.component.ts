@@ -38,6 +38,26 @@ export class AdminMenuComponent implements OnInit {
     available: true,
   });
   creating = signal(false);
+  createImageFile = signal<File | null>(null);
+createImagePreview = signal<string | null>(null);
+
+onCreateImageSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0] || null;
+
+  this.createImageFile.set(file);
+
+  if (!file) {
+    this.createImagePreview.set(null);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.createImagePreview.set(reader.result as string);
+  };
+  reader.readAsDataURL(file);
+}
 
   // edit state
   editingId = signal<number | null>(null);
@@ -83,6 +103,7 @@ export class AdminMenuComponent implements OnInit {
         this.loading.set(false);
         this.error.set('Failed to load menu items.');
       },
+
     });
   }
 
@@ -114,18 +135,22 @@ export class AdminMenuComponent implements OnInit {
       return;
     }
 
-    const body = {
-      name: f.name.trim(),
-      category: f.category.trim(),
-      price: f.price,
-      description: f.description.trim() || null,
-      dietary_tags: f.dietary_tags.trim() || null,
-      available: f.available ? 1 : 0,
-    };
+    const formData = new FormData();
+formData.append('name', f.name.trim());
+formData.append('category', f.category.trim());
+formData.append('price', String(f.price));
+formData.append('description', f.description.trim() || '');
+formData.append('dietary_tags', f.dietary_tags.trim() || '');
+formData.append('available', f.available ? '1' : '0');
+
+const file = this.createImageFile();
+if (file) {
+  formData.append('image', file);
+}
 
     this.creating.set(true);
 
-    this.http.post(`${API_BASE}/menu`, body).subscribe({
+    this.http.post(`${API_BASE}/menu`, formData).subscribe({
       next: () => {
         this.creating.set(false);
         this.success.set('Menu item created.');
@@ -137,6 +162,8 @@ export class AdminMenuComponent implements OnInit {
           dietary_tags: '',
           available: true,
         });
+        this.createImageFile.set(null);
+this.createImagePreview.set(null);
         this.loadMenu();
       },
       error: (err) => {

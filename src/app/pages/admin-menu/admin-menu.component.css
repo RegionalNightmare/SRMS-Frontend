@@ -262,3 +262,17 @@ button[disabled] {
     display: none; /* hide some columns on tiny screens */
   }
 }
+
+.image-preview {
+  margin-top: -0.2rem;
+}
+
+.image-preview img {
+  display: block;
+  max-width: 220px;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  border: 1px solid #374151;
+  background: #020617;
+}
