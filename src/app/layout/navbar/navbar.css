@@ -83,6 +83,8 @@ a.active {
   position: relative;
   display: flex;
   align-items: center;
+    padding-bottom: 0.35rem;
+  margin-bottom: -0.35rem;
 }
 
 .admin-trigger {
@@ -113,7 +115,7 @@ a.active {
 
 .admin-dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.55rem);
+  top: calc(100% + 0.2rem);
   left: 0;
   min-width: 180px;
   padding: 0.45rem;

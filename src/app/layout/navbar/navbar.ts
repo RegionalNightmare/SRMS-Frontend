@@ -33,13 +33,22 @@ export class Navbar {
     this.adminMenuOpen = !this.adminMenuOpen;
   }
 
-  openAdminMenu() {
-    this.adminMenuOpen = true;
-  }
+  private adminMenuTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  closeAdminMenu() {
-    this.adminMenuOpen = false;
+openAdminMenu() {
+  if (this.adminMenuTimeout) {
+    clearTimeout(this.adminMenuTimeout);
+    this.adminMenuTimeout = null;
   }
+  this.adminMenuOpen = true;
+}
+
+closeAdminMenu() {
+  this.adminMenuTimeout = setTimeout(() => {
+    this.adminMenuOpen = false;
+    this.adminMenuTimeout = null;
+  }, 180);
+}
 
   toggleMobileAdminMenu() {
     this.mobileAdminMenuOpen = !this.mobileAdminMenuOpen;
