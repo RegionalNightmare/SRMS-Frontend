@@ -18,7 +18,7 @@ export class ChatbotComponent {
   messages = signal<ChatMessage[]>([
     {
       from: 'bot',
-      text: 'Hi! I’m your ARMS assistant. I can explain how to view the menu, place orders, book reservations, or request events.',
+      text: 'Hi! I’m your SRMS assistant. I can explain how to view the menu, place orders, book reservations, or request events.',
     },
   ]);
   input = signal('');
@@ -65,7 +65,7 @@ export class ChatbotComponent {
       );
     } else {
       this.addBot(
-        "I’m mainly here to explain how ARMS works: menu, orders, reservations, events, and the admin dashboard. Try asking about one of those!"
+        "I’m mainly here to explain how SRMS works: menu, orders, reservations, events, and the admin dashboard. Try asking about one of those!"
       );
     }
   }
@@ -85,7 +85,7 @@ export class ChatbotComponent {
     switch (topic) {
       case 'overview':
         return (
-          'ARMS or Adaptable Restaurant Management System is your restaurant management system of choice. As a guest you can browse the menu, place pickup/delivery orders, book table reservations, and request special events. Staff and managers can use the Admin Dashboard to view analytics and manage the menu.'
+          'SRMS or Smart Restaurant Management System is your restaurant management system of choice. As a guest you can browse the menu, place pickup/delivery orders, book table reservations, and request special events. Staff and managers can use the Admin Dashboard to view analytics and manage the menu.'
         );
       case 'order':
         return (
